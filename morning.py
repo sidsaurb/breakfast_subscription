@@ -1,0 +1,82 @@
+#!/usr/bin/python3.5
+
+from __future__ import print_function
+import httplib2
+import os
+import datetime
+from apiclient import discovery
+from oauth2client import client
+from oauth2client import tools
+from oauth2client.file import Storage
+import telepot
+import sys, time
+import json
+
+fd = open("config", "r")
+conf = fd.read()
+chat_ids = json.loads(conf)
+fd.close()
+
+bot = telepot.Bot("353764032:AAElxkfWK0Rx1tnzgpHUxLmRkHGlSr4ycVs")
+
+SCOPES = 'https://www.googleapis.com/auth/spreadsheets'
+CLIENT_SECRET_FILE = 'client_secret.json'
+APPLICATION_NAME = 'Breakfast'
+
+sheet = None
+date = None
+
+def get_credentials():
+    home_dir = os.path.expanduser('~')
+    credential_dir = os.path.join(home_dir, '.credentials')
+    if not os.path.exists(credential_dir):
+        os.makedirs(credential_dir)
+    credential_path = os.path.join(credential_dir, 'sheets.googleapis.com-python-quickstart.json')
+    store = Storage(credential_path)
+    credentials = store.get()
+    if not credentials or credentials.invalid:
+        flow = client.flow_from_clientsecrets(CLIENT_SECRET_FILE, SCOPES)
+        flow.user_agent = APPLICATION_NAME
+        credentials = tools.run_flow(flow, store)
+    return credentials
+
+def getSheet():
+    global sheet, date
+    today = datetime.datetime.now()
+    date = today.strftime("%d.%m.%Y")
+    credentials = get_credentials()
+    http = credentials.authorize(httplib2.Http())
+    discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?version=v4')
+    service = discovery.build('sheets', 'v4', http=http, discoveryServiceUrl=discoveryUrl)
+    spreadsheetId = '1IA2D5x7xUqo7ee0GFfbfJ_W9b49jJZdeEZ5EP1sEzfE'
+    rangeName = 'Sheet1!A3:Z25'
+    result = service.spreadsheets().values().get(spreadsheetId=spreadsheetId, range=rangeName).execute()
+    sheet = result.get('values', [])
+
+def getSelection(date, name):
+    idx = sheet[0].index(date)
+    for item in sheet[5:]:
+        if item[0] == name:
+            try:
+                return item[idx]
+            except:
+                return ""
+    raise Exception
+
+def main():
+    getSheet()
+    for chat_id in chat_ids:
+        username = chat_ids[chat_id]
+        try:
+            selection = getSelection(date, username)
+        except:
+            bot.sendMessage(222739419, "getSelection() error "+date+","+username)
+            continue
+        if selection == "":
+            bot.sendMessage(chat_id, "You have not selected any breakfast for today.\nKindly don't eat other's :)")
+        else:
+            bot.sendMessage(chat_id, "Your breakfast selection for today is:\n"+selection+".\nKindly don't eat other's :)")
+
+if __name__ == '__main__':
+    main()
+
