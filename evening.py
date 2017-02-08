@@ -31,7 +31,7 @@ def get_credentials():
     credential_dir = os.path.join(home_dir, '.credentials')
     if not os.path.exists(credential_dir):
         os.makedirs(credential_dir)
-    credential_path = os.path.join(credential_dir, 'sheets.googleapis.com-python-quickstart.json')
+    credential_path = os.path.join(credential_dir, 'breakfast.json')
     store = Storage(credential_path)
     credentials = store.get()
     if not credentials or credentials.invalid:
