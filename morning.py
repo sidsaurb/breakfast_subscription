@@ -72,10 +72,14 @@ def main():
         except:
             bot.sendMessage(222739419, "getSelection() error "+date+","+username)
             continue
-        if selection == "":
-            bot.sendMessage(chat_id, "You have not selected any breakfast for today.\nKindly don't eat other's :)")
-        else:
-            bot.sendMessage(chat_id, "Your breakfast selection for today is:\n"+selection+".\nKindly don't eat other's :)")
+        try:
+            if selection == "":
+                bot.sendMessage(chat_id, "You have not selected any breakfast for today.\nKindly don't eat other's :)")
+            else:
+                bot.sendMessage(chat_id, "Your breakfast selection for today is:\n*"+selection+".*\nKindly don't eat other's :)", parse_mode='Markdown')
+        except:
+            bot.sendMessage(222739419, "sendMessage() error "+str(chat_id))
+
 
 if __name__ == '__main__':
     main()

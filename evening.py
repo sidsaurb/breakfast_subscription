@@ -83,7 +83,10 @@ def main():
             bot.sendMessage(222739419, "getSelection() error "+date+","+username)
             continue
         if selection == "":
-            bot.sendMessage(chat_id, "You have not marked your breakfast for tomorrow! Availabe menu options for "+date+": \n1: "+menu[0]+"\n2: "+menu[1]+"\n3: "+menu[2]+"\nPlease reply with option number.")
+            try:
+                bot.sendMessage(chat_id, "You have not marked your breakfast for tomorrow! Available menu options for "+date+": \n*1: "+menu[0]+"\n2: "+menu[1]+"\n3: "+menu[2]+"*\nPlease reply with option number.", parse_mode='Markdown')
+            except:
+                bot.sendMessage(222739419, "sendMessage() error "+str(chat_id))
 
 if __name__ == '__main__':
     main()

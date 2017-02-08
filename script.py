@@ -78,11 +78,19 @@ def getCellName(date, name):
     rowIndex = 8
     for item in sheet[5:]:
         if item[0] == name:
-            break
+            return str(columnIndex)+str(rowIndex)
         rowIndex = rowIndex + 1
-    if rowIndex == 26:
-        raise Exception
-    return str(columnIndex)+str(rowIndex)
+    raise Exception
+
+def getSelection(date, name):
+    idx = sheet[0].index(date)
+    for item in sheet[5:]:
+        if item[0] == name:
+            try:
+                return item[idx]
+            except:
+                return ""
+    raise Exception
 
 def handle(msg):
     content_type, chat_type, chat_id = telepot.glance(msg)
@@ -91,7 +99,7 @@ def handle(msg):
     try:
         username = chat_ids[str(chat_id)]
     except:
-        bot.sendMessage(chat_id, "You are not a registered user!")
+        bot.sendMessage(chat_id, "You are not a registered user! Ping @sidsaurb to register!")
         bot.sendMessage(222739419, "Some unregistered user tried to send a message "+str(chat_id)+","+msg['from']['first_name'])
         return
 
@@ -114,7 +122,12 @@ def handle(msg):
         if index > 3:
             raise Exception
     except:
-        bot.sendMessage(chat_id, "This bot only accepts integer messages! That too constraint in range 1 to 3! Availabe menu options for " +date+": \n1: "+menu[0]+"\n2: "+menu[1]+"\n3: "+menu[2]+"\nPlease reply with option number.")
+        selection = getSelection(date, username)
+        if selection == "":
+            bot.sendMessage(chat_id, "Hi.\nThis bot only accepts integer messages constraint in range 1 to 3! You have no selection for "+date+".\nAvailable menu options for " +date+": \n*1: "+menu[0]+"\n2: "+menu[1]+"\n3: "+menu[2]+"\n*Please reply with option number.", parse_mode='Markdown')
+        else:
+            bot.sendMessage(chat_id, "Hi.\nThis bot only accepts integer messages constraint in range 1 to 3! Your selection for "+date+" is:\n*"+selection+"*.\nAvailable menu options for " +date+": \n*1: "+menu[0]+"\n2: "+menu[1]+"\n3: "+menu[2]+"\n*Please reply with option number.", parse_mode='Markdown')
+
         return
     selection = menu[index - 1]
 
@@ -134,12 +147,6 @@ def handle(msg):
     bot.sendMessage(chat_id, "Selection updated for date "+date+"!")
 
 def main():
-    #getSheet()
-    #for item in sheet:
-    #    print(item)
-    #print(getMenu(date))
-    #print(getCellName(date, "ARWINDER SINGH"))
-    #writeToCell("H16", "Hello world")
     bot.message_loop(handle)
 
 if __name__ == '__main__':
