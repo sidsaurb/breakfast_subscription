@@ -2,3 +2,5 @@ logs
 client_secret.json
 config
 *.swp
+*.out
+typescript

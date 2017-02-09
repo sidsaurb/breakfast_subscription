@@ -1,4 +1,4 @@
-#!/usr/bin/python3.5
+#!/usr/bin/python3.4
 
 from __future__ import print_function
 import httplib2
@@ -42,7 +42,6 @@ def get_credentials():
         flow.user_agent = APPLICATION_NAME
         credentials = tools.run_flow(flow, store)
     return credentials
-
 
 def getSheet():
     global sheet, date
@@ -124,9 +123,9 @@ def handle(msg):
     except:
         selection = getSelection(date, username)
         if selection == "":
-            bot.sendMessage(chat_id, "Hi.\nThis bot only accepts integer messages constraint in range 1 to 3! You have no selection for "+date+".\nAvailable menu options for " +date+": \n*1: "+menu[0]+"\n2: "+menu[1]+"\n3: "+menu[2]+"\n*Please reply with option number.", parse_mode='Markdown')
+            bot.sendMessage(chat_id, "Hi!\nYou have no selection for "+date+".\nAvailable menu options for " +date+": \n*1: "+menu[0]+"\n2: "+menu[1]+"\n3: "+menu[2]+"\n*Please reply with option number.", parse_mode='Markdown')
         else:
-            bot.sendMessage(chat_id, "Hi.\nThis bot only accepts integer messages constraint in range 1 to 3! Your selection for "+date+" is:\n*"+selection+"*.\nAvailable menu options for " +date+": \n*1: "+menu[0]+"\n2: "+menu[1]+"\n3: "+menu[2]+"\n*Please reply with option number.", parse_mode='Markdown')
+            bot.sendMessage(chat_id, "Hi!\nYour selection for "+date+" is:\n*"+selection+"*.\nAvailable menu options for " +date+": \n*1: "+menu[0]+"\n2: "+menu[1]+"\n3: "+menu[2]+"\n*Please reply with option number.", parse_mode='Markdown')
 
         return
     selection = menu[index - 1]
@@ -144,7 +143,7 @@ def handle(msg):
         bot.sendMessage(chat_id, "There was some problem in updating your selection!")
         bot.sendMessage(222739419, "writeToCell() error "+cell+","+selection+","+str(chat_id)+","+date)
         return
-    bot.sendMessage(chat_id, "Selection updated for date "+date+"!")
+    bot.sendMessage(chat_id, "You have selected *"+selection+"* as breakfast for date "+date+"!\nSay *Hi* to list available options", parse_mode='Markdown')
 
 def main():
     bot.message_loop(handle)

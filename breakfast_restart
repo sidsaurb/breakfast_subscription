@@ -1,0 +1,5 @@
+#!/bin/bash
+
+kill -9 `pgrep -f breakfast_script`
+cd /home/siddhant_saurabh/breakfast_subscription 
+nohup /usr/bin/python3 /home/siddhant_saurabh/breakfast_subscription/breakfast_script &
