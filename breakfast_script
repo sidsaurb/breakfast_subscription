@@ -52,7 +52,7 @@ def getSheet():
     discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?version=v4')
     service = discovery.build('sheets', 'v4', http=http, discoveryServiceUrl=discoveryUrl)
     spreadsheetId = '1IA2D5x7xUqo7ee0GFfbfJ_W9b49jJZdeEZ5EP1sEzfE'
-    rangeName = 'May!A3:AI25'
+    rangeName = 'July!A3:AI25'
     result = service.spreadsheets().values().get(spreadsheetId=spreadsheetId, range=rangeName).execute()
     sheet = result.get('values', [])
 
@@ -62,7 +62,7 @@ def writeToCell(cell, data):
     discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?version=v4')
     service = discovery.build('sheets', 'v4', http=http, discoveryServiceUrl=discoveryUrl)
     spreadsheetId = '1IA2D5x7xUqo7ee0GFfbfJ_W9b49jJZdeEZ5EP1sEzfE'
-    rangeName = "May!"+cell+":"+cell
+    rangeName = "July!"+cell+":"+cell
     values = {'values': [[data,],]}
     service.spreadsheets().values().update(spreadsheetId=spreadsheetId, range=rangeName, valueInputOption='RAW', body=values).execute()
 
@@ -73,7 +73,11 @@ def getMenu(date):
 def getCellName(date, name):
     columnStart = 'B'
     idx = sheet[0].index(date)
-    columnIndex = chr(ord(columnStart)+idx-1)
+    columnId = ord(columnStart) + idx - 1
+    if columnId > ord("A") + 25:
+        columnIndex = "A" + chr(columnId-26)
+    else: 
+        columnIndex = chr(columnId)
     rowIndex = 8
     for item in sheet[5:]:
         if item[0] == name:
