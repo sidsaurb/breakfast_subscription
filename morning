@@ -49,7 +49,7 @@ def getSheet():
     discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?version=v4')
     service = discovery.build('sheets', 'v4', http=http, discoveryServiceUrl=discoveryUrl)
     spreadsheetId = '1IA2D5x7xUqo7ee0GFfbfJ_W9b49jJZdeEZ5EP1sEzfE'
-    rangeName = 'July!A3:AI35'
+    rangeName = 'Aug!A3:AI35'
     result = service.spreadsheets().values().get(spreadsheetId=spreadsheetId, range=rangeName).execute()
     sheet = result.get('values', [])
 
