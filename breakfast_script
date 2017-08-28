@@ -68,7 +68,7 @@ def writeToCell(cell, data):
 
 def getMenu(date):
     idx = sheet[0].index(date)
-    return [item[idx] for item in sheet[1:4]]
+    return [item[idx] for item in sheet[1:3]]
 
 def getCellName(date, name):
     columnStart = 'B'
@@ -122,14 +122,14 @@ def handle(msg):
 
     try:
         index = int(text)
-        if index > 3:
+        if index > 2:
             raise Exception
     except:
         selection = getSelection(date, username)
         if selection == "":
-            bot.sendMessage(chat_id, "Hi!\nYou have no selection for "+date+".\nAvailable menu options for " +date+": \n*1: "+menu[0]+"\n2: "+menu[1]+"\n3: "+menu[2]+"\n*Please reply with option number.", parse_mode='Markdown')
+            bot.sendMessage(chat_id, "Hi!\nYou have no selection for "+date+".\nAvailable menu options for " +date+": \n*1: "+menu[0]+"\n2: "+menu[1]+"\n*Please reply with option number.", parse_mode='Markdown')
         else:
-            bot.sendMessage(chat_id, "Hi!\nYour selection for "+date+" is:\n*"+selection+"*.\nAvailable menu options for " +date+": \n*1: "+menu[0]+"\n2: "+menu[1]+"\n3: "+menu[2]+"\n*Please reply with option number.", parse_mode='Markdown')
+            bot.sendMessage(chat_id, "Hi!\nYour selection for "+date+" is:\n*"+selection+"*.\nAvailable menu options for " +date+": \n*1: "+menu[0]+"\n2: "+menu[1]+"\n*Please reply with option number.", parse_mode='Markdown')
 
         return
     selection = menu[index - 1]
